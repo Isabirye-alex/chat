@@ -1,5 +1,4 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
-import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,27 +38,28 @@ class LoginController extends GetxController {
   void validateAndSubmit() async {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
+
       try {
-        await authRepository.logIn(
+        final response = await authRepository.logIn(
           emailController.text.trim(),
           passwordController.text.trim(),
         );
-        Get.snackbar('Success', 'Account created successfully.');
-        Get.to(() => ChatsScreen());
+        Get.snackbar(
+          'Error',
+          'No user profile found in Firestore',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
       } catch (e) {
         Get.snackbar(
+          'Login Failed',
+          '$e',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
-          colorText: Colors.blue,
-
-          'Error',
-          'Failed to create account: $e',
+          colorText: Colors.white,
         );
-      } finally {
-        isLoading.value = false;
       }
-    } else {
-      Get.snackbar('Error', 'Please fix the errors in the form');
     }
   }
 

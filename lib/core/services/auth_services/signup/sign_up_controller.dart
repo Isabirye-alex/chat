@@ -3,7 +3,6 @@ import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
@@ -17,7 +16,6 @@ class SignUpController extends GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   var isLoading = false.obs;
-  final db = FirebaseFirestore.instance;
 
   String? validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
@@ -58,21 +56,24 @@ class SignUpController extends GetxController {
           emailController.text.trim(),
           passwordController.text.trim(),
         );
-          if(response != null){
+        if (response != null) {
           UserModel user = UserModel(
-            uid:response.uid, 
+            uid: response.user!.uid,
             lastName: lastNameController.text.trim(),
-             firstName: firstNameController.text.trim(),
-              userName: usernameController.text.trim(), 
-              email: emailController.text.trim(),
-              password: passwordController.text.trim(),
-               );
-          }
-        
+            firstName: firstNameController.text.trim(),
+            userName: usernameController.text.trim(),
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+            imageUrl: '',
+          );
+          await authRepository.saveUser(user.toMap());
+        }
+
         Get.snackbar('Success', 'Account created successfully.');
         Get.to(() => ChatsScreen());
       } catch (e) {
         Get.snackbar(
+          duration: Duration(seconds: 20),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.blue,
