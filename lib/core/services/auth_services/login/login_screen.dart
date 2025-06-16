@@ -1,5 +1,4 @@
 import 'package:chat_app/core/services/auth_services/login/login_controller.dart';
-import 'package:chat_app/core/services/auth_services/signup/sign_up_controller.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_screen.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_button.dart';
@@ -43,6 +42,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   5.verticalSpace,
                   Form(
+                    key: controller.formKey,
                     child: Column(
                       children: <Widget>[
                         CustomTextField(
@@ -53,13 +53,13 @@ class LoginScreen extends StatelessWidget {
                         CustomTextField(
                           controller: controller.passwordController,
                           validator: (value)=> controller.validatePassword(value),
-                          labelText: 'Enter your username'),
+                          labelText: 'Enter Password'),
                       ],
                     ),
                   ),
                   20.verticalSpace,
-                  CustomTextButton(
-                    isLoading: false,
+                  Obx(()=>CustomTextButton(
+                    isLoading: controller.isLoading.value,
                     fontSize: 24,
                     color: Colors.blue,
                     text: 'LogIn',
@@ -68,6 +68,7 @@ class LoginScreen extends StatelessWidget {
                     callBack: () 
                       =>controller.validateAndSubmit()
                     ,
+                  ),
                   ),
                   10.verticalSpace,
                   CustomTextButton(
