@@ -3,17 +3,13 @@ import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpController extends GetxController {
-  static SignUpController get instance => Get.find();
+class LoginController extends GetxController {
+  static LoginController get instance => Get.find();
 
-  final  authRepository = AuthRepository();
+  final authRepository = AuthRepository();
   final formKey = GlobalKey<FormState>();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
   final emailController = TextEditingController();
-  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
   var isLoading = false.obs;
 
   String? validateNotEmpty(String? value, String fieldName) {
@@ -40,18 +36,11 @@ class SignUpController extends GetxController {
     return null;
   }
 
-  String? validateConfirmPassword(String? value) {
-    if (value != passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
   void validateAndSubmit() async {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
       try {
-        await authRepository.signUp(
+        await authRepository.logIn(
           emailController.text.trim(),
           passwordController.text.trim(),
         );
@@ -62,8 +51,10 @@ class SignUpController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.blue,
-          
-          'Error', 'Failed to create account: $e');
+
+          'Error',
+          'Failed to create account: $e',
+        );
       } finally {
         isLoading.value = false;
       }
@@ -71,14 +62,11 @@ class SignUpController extends GetxController {
       Get.snackbar('Error', 'Please fix the errors in the form');
     }
   }
+
   @override
   void onClose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
     emailController.dispose();
-    usernameController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
     super.onClose();
   }
 }

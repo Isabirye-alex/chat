@@ -1,3 +1,4 @@
+import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_controller.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_button.dart';
@@ -93,20 +94,25 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                   20.verticalSpace,
-                  CustomTextButton(
-                    fontSize: 24,
-                    color: Colors.blue,
-                    text: 'LogIn',
-                    radius: 10.r,
-                    textColor: Colors.white,
-                    callBack: () {},
+                  Obx(()=>CustomTextButton(
+                    isLoading: controller.isLoading.value,
+                      fontSize: 24,
+                      color: Colors.blue,
+                      text: 'Sign up',
+                      radius: 10.r,
+                      textColor: Colors.white,
+                      callBack: () =>controller.validateAndSubmit(),
+                    ),
                   ),
                   10.verticalSpace,
                   CustomTextButton(
+                    isLoading:  false,
                     fontSize: 18,
-                    text: 'Don\'t have an account? Sign Up',
+                    text: 'Already have an account? Log in',
                     textColor: Colors.blue,
-                    callBack: () {},
+                    callBack: () 
+                      =>Get.to(()=>LoginScreen())
+                    ,
                   ),
                 ],
               ),

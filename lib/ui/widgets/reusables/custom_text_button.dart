@@ -6,17 +6,21 @@ class CustomTextButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.callBack,
+    required this.isLoading,
     this.color,
     this.radius,
     this.textColor,
-    required this.fontSize
+    required this.fontSize,
   });
+
   final String text;
   final VoidCallback callBack;
+  final bool isLoading;
   final Color? color;
   final Color? textColor;
   final double? radius;
   final double fontSize;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,16 +31,25 @@ class CustomTextButton extends StatelessWidget {
       height: 40.h,
       width: 1.sw,
       child: TextButton(
-        onPressed: callBack,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: fontSize,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        onPressed: isLoading ? null : callBack,
+        child: isLoading
+            ? SizedBox(
+                height: 20.h,
+                width: 20.h,
+                child: CircularProgressIndicator(
+                  color: textColor ?? Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: fontSize,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
       ),
     );
   }

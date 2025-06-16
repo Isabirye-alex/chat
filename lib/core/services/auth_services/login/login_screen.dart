@@ -1,3 +1,4 @@
+import 'package:chat_app/core/services/auth_services/login/login_controller.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_controller.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_screen.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
@@ -12,7 +13,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
+    final controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -50,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                           labelText: 'Enter your email'),
                         8.verticalSpace,
                         CustomTextField(
-                          controller: controller.usernameController,
+                          controller: controller.passwordController,
                           validator: (value)=> controller.validatePassword(value),
                           labelText: 'Enter your username'),
                       ],
@@ -58,15 +59,19 @@ class LoginScreen extends StatelessWidget {
                   ),
                   20.verticalSpace,
                   CustomTextButton(
+                    isLoading: false,
                     fontSize: 24,
                     color: Colors.blue,
                     text: 'LogIn',
                     radius: 10.r,
                     textColor: Colors.white,
-                    callBack: () {},
+                    callBack: () 
+                      =>controller.validateAndSubmit()
+                    ,
                   ),
                   10.verticalSpace,
                   CustomTextButton(
+                    isLoading: false,
                     fontSize: 18,
                     text: 'Don\'t have an account? Sign Up',
                     textColor: Colors.blue,
