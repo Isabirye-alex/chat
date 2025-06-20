@@ -16,6 +16,7 @@ class SignUpController extends GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   var isLoading = false.obs;
+  late AuthRepository auth;
 
   String? validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
@@ -57,7 +58,7 @@ class SignUpController extends GetxController {
           passwordController.text.trim(),
         );
         if (response != null) {
-          UserModel user = UserModel(
+          UserModel user = UserModel( 
             uid: response.user!.uid,
             lastName: lastNameController.text.trim(),
             firstName: firstNameController.text.trim(),

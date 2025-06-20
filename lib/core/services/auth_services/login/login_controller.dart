@@ -1,4 +1,5 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
+import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,17 +41,29 @@ class LoginController extends GetxController {
       isLoading.value = true;
 
       try {
-        final response = await authRepository.logIn(
+        // Step 1: Log in
+        await authRepository.logIn(
           emailController.text.trim(),
           passwordController.text.trim(),
         );
-        Get.snackbar(
-          'Error',
-          'No user profile found in Firestore',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
+
+          // Step 2: Fetch user details from Firestore
+          final user = await authRepository.getCurrentUserDetails();
+       
+        if (user == null) {
+          Get.snackbar(
+            'Error',
+            'No user data found in Firestore.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+          );
+          return;
+        }
+        // Optional: You can store `user` globally using a GetX controller or some other state management
+
+        Get.snackbar('Success', 'Logged in as ${user.firstName}');
+        Get.to(() => ChatsScreen());
       } catch (e) {
         Get.snackbar(
           'Login Failed',
@@ -59,7 +72,11 @@ class LoginController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+      } finally {
+        isLoading.value = false;
       }
+    } else {
+      Get.snackbar('Error', 'Please fix the form errors');
     }
   }
 

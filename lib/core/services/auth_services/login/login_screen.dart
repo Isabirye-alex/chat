@@ -7,9 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isPasswordHidden = true;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
@@ -46,29 +52,41 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         CustomTextField(
+                          isObscureText: isPasswordHidden = false,
                           controller: controller.emailController,
-                          validator: (value)=>controller.validateNotEmpty(value, 'Email'),
-                          labelText: 'Enter your email'),
+                          validator: (value) =>
+                              controller.validateNotEmpty(value, 'Email'),
+                          labelText: 'Enter your email',
+                        ),
                         8.verticalSpace,
                         CustomTextField(
+                          iconCallBack: () {
+                            setState(() {
+                              isPasswordHidden = !isPasswordHidden;
+                            });
+                          },
+                          iconData: isPasswordHidden?Icons.visibility:Icons.visibility_off,
+                          isObscureText: isPasswordHidden,
+                          charcterType: '*',
                           controller: controller.passwordController,
-                          validator: (value)=> controller.validatePassword(value),
-                          labelText: 'Enter Password'),
+                          validator: (value) =>
+                              controller.validatePassword(value),
+                          labelText: 'Enter Password',
+                        ),
                       ],
                     ),
                   ),
                   20.verticalSpace,
-                  Obx(()=>CustomTextButton(
-                    isLoading: controller.isLoading.value,
-                    fontSize: 24,
-                    color: Colors.blue,
-                    text: 'LogIn',
-                    radius: 10.r,
-                    textColor: Colors.white,
-                    callBack: () 
-                      =>controller.validateAndSubmit()
-                    ,
-                  ),
+                  Obx(
+                    () => CustomTextButton(
+                      isLoading: controller.isLoading.value,
+                      fontSize: 24,
+                      color: Colors.blue,
+                      text: 'LogIn',
+                      radius: 10.r,
+                      textColor: Colors.white,
+                      callBack: () => controller.validateAndSubmit(),
+                    ),
                   ),
                   10.verticalSpace,
                   CustomTextButton(
