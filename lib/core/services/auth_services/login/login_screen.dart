@@ -16,9 +16,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordHidden = true;
+  final controller = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -65,7 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               isPasswordHidden = !isPasswordHidden;
                             });
                           },
-                          iconData: isPasswordHidden?Icons.visibility:Icons.visibility_off,
+                          iconData: isPasswordHidden
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           isObscureText: isPasswordHidden,
                           charcterType: '*',
                           controller: controller.passwordController,
@@ -105,5 +107,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 }

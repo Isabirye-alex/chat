@@ -17,9 +17,9 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
+    final controller = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -158,5 +158,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+    @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 }

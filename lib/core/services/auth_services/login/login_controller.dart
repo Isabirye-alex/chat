@@ -75,6 +75,7 @@ class LoginController extends GetxController {
       } finally {
         isLoading.value = false;
       }
+      
     } else {
       Get.snackbar('Error', 'Please fix the form errors');
     }

@@ -1,4 +1,4 @@
-import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
+import 'package:chat_app/core/others/wrapper/wrapper.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class ChatApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          home: LoginScreen(),
+          home: Wrapper(),
         );
       },
     );
