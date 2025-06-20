@@ -1,7 +1,7 @@
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+
 
 class AuthRepository {
   final db = FirebaseFirestore.instance;

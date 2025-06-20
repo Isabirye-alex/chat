@@ -1,5 +1,6 @@
 import 'package:chat_app/core/services/auth_services/login/login_controller.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_screen.dart';
+import 'package:chat_app/core/services/bindings/log_in_bindings.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_button.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_field.dart';
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: 'Don\'t have an account? Sign Up',
                     textColor: Colors.blue,
                     callBack: () {
-                      Get.to(() => SignUpScreen());
+                      Get.off(() => SignUpScreen(), binding: LogInBindings());
                     },
                   ),
                 ],
@@ -108,9 +109,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
 }

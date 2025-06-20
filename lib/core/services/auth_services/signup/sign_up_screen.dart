@@ -1,5 +1,6 @@
 import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_controller.dart';
+import 'package:chat_app/core/services/bindings/sign_up_bindings.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_button.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_field.dart';
@@ -17,7 +18,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
-    final controller = Get.put(SignUpController());
+  final controller = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             8.horizontalSpace,
                             Expanded(
                               flex: 5,
-                              child: CustomTextField(                               
+                              child: CustomTextField(
                                 controller: controller.lastNameController,
                                 validator: (value) => controller
                                     .validateNotEmpty(value, 'Last Name'),
@@ -117,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           iconData: isConfirmPasswordHidden
                               ? Icons.visibility
                               : Icons.visibility_off,
-                              charcterType: '*',
+                          charcterType: '*',
                           isObscureText: isConfirmPasswordHidden,
                           controller: controller.confirmPasswordController,
                           validator: (value) =>
@@ -145,7 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontSize: 18,
                     text: 'Already have an account? Log in',
                     textColor: Colors.blue,
-                    callBack: () => Get.to(() => LoginScreen()),
+                    callBack: () => Get.off(() => LoginScreen(), binding: SignUpBindings()),
                   ),
                 ],
               ),
@@ -156,9 +157,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-    @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
+
 }

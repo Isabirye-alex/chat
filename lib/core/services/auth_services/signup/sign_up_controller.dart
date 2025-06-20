@@ -8,7 +8,6 @@ class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
 
   final authRepository = AuthRepository();
-  final formKey = GlobalKey<FormState>();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -17,6 +16,7 @@ class SignUpController extends GetxController {
   final confirmPasswordController = TextEditingController();
   var isLoading = false.obs;
   late AuthRepository auth;
+  final formKey = GlobalKey<FormState>();
 
   String? validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
@@ -58,7 +58,7 @@ class SignUpController extends GetxController {
           passwordController.text.trim(),
         );
         if (response != null) {
-          UserModel user = UserModel( 
+          UserModel user = UserModel(
             uid: response.user!.uid,
             lastName: lastNameController.text.trim(),
             firstName: firstNameController.text.trim(),
@@ -71,7 +71,9 @@ class SignUpController extends GetxController {
         }
 
         Get.snackbar('Success', 'Account created successfully.');
+        Get.delete<SignUpController>();
         Get.offAll(() => LoginScreen());
+        Get.delete<SignUpController>();
       } catch (e) {
         Get.snackbar(
           duration: Duration(seconds: 20),
