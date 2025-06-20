@@ -52,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: <Widget>[
                         CustomTextField(
-                          isObscureText: isPasswordHidden = false,
                           controller: controller.emailController,
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Email'),

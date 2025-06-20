@@ -63,7 +63,7 @@ class LoginController extends GetxController {
         // Optional: You can store `user` globally using a GetX controller or some other state management
 
         Get.snackbar('Success', 'Logged in as ${user.firstName}');
-        Get.to(() => ChatsScreen());
+        Get.offAll(() => ChatsScreen());
       } catch (e) {
         Get.snackbar(
           'Login Failed',
@@ -75,7 +75,7 @@ class LoginController extends GetxController {
       } finally {
         isLoading.value = false;
       }
-      
+
     } else {
       Get.snackbar('Error', 'Please fix the form errors');
     }

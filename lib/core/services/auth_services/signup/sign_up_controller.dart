@@ -1,6 +1,6 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
+import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
-import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,7 +71,7 @@ class SignUpController extends GetxController {
         }
 
         Get.snackbar('Success', 'Account created successfully.');
-        Get.to(() => ChatsScreen());
+        Get.offAll(() => LoginScreen());
       } catch (e) {
         Get.snackbar(
           duration: Duration(seconds: 20),

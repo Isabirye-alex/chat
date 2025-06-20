@@ -57,18 +57,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Expanded(
                               flex: 5,
                               child: CustomTextField(
-                                isObscureText: isPasswordHidden = false,
                                 controller: controller.firstNameController,
                                 validator: (value) => controller
                                     .validateNotEmpty(value, 'First Name'),
-                                labelText: 'Firs tname',
+                                labelText: 'First Name',
                               ),
                             ),
                             8.horizontalSpace,
                             Expanded(
                               flex: 5,
-                              child: CustomTextField(
-                                isObscureText: isPasswordHidden = false,
+                              child: CustomTextField(                               
                                 controller: controller.lastNameController,
                                 validator: (value) => controller
                                     .validateNotEmpty(value, 'Last Name'),
@@ -79,7 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         8.verticalSpace,
                         CustomTextField(
-                           isObscureText: isPasswordHidden = false,
                           controller: controller.emailController,
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Email'),
@@ -87,7 +84,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         8.verticalSpace,
                         CustomTextField(
-                         isObscureText: isPasswordHidden = false,
                           controller: controller.usernameController,
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Username'),
