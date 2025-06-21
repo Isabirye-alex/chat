@@ -1,11 +1,11 @@
-import 'package:chat_app/models/user_model/user_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble({super.key, this.isCurrentUser = true,required this.user});
+  const ChatBubble({super.key, this.isCurrentUser = true,});
   final bool isCurrentUser;
-  final UserModel user;
+
 
   @override
   Widget build(BuildContext context) {

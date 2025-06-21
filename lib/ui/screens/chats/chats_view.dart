@@ -1,3 +1,4 @@
+import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:chat_app/ui/widgets/chat_bubble.dart';
 import 'package:chat_app/ui/widgets/chat_view_text_field.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ChatsView extends StatelessWidget {
-  const ChatsView({super.key});
+  const ChatsView({super.key, required this.user});
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class ChatsView extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => Get.back(),
                 child: Icon(Icons.arrow_back),
-              ), 
+              ),
             ),
             20.horizontalSpace,
             Row(
@@ -32,11 +34,14 @@ class ChatsView extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.green,
-                  child: Text('IA', style: TextStyle(color: Colors.white)),
+                  child: Text(
+                    '${user.firstName![0]} ${user.lastName![0]}',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 10.horizontalSpace,
                 Text(
-                  'Isabirye Alex',
+                  '${user.firstName!} ${user.lastName!}',
                   style: TextStyle(color: const Color.fromARGB(255, 4, 24, 40)),
                 ),
               ],
