@@ -34,6 +34,37 @@ class AuthRepository {
     return response;
   }
 
+  
+  Future<bool> isUsernameTaken(String username) async {
+    final query = await db
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .limit(1)
+        .get();
+
+    return query.docs.isNotEmpty;
+  }
+
+  Future<String?> getEmailByUsername(String username) async {
+    try {
+      final querySnapshot = await db
+          .collection('users')
+          .where('userName', isEqualTo: username)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = querySnapshot.docs.first.data();
+        return userData['email'] as String?;
+      } else {
+        return null; 
+      }
+    } catch (e) {
+      throw Exception('Error fetching email by username: $e');
+    }
+  }
+
+
   Future saveUser(Map<String, dynamic> userData) async {
     await db.collection('users').doc(userData['uid']).set(userData);
   }

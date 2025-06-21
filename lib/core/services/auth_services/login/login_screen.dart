@@ -53,10 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: <Widget>[
                         CustomTextField(
-                          controller: controller.emailController,
+                          controller: controller.usernameController,
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Email'),
-                          labelText: 'Enter your email',
+                          labelText: 'Enter your Username',
                         ),
                         8.verticalSpace,
                         CustomTextField(

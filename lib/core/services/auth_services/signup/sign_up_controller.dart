@@ -1,6 +1,7 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
-import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
+import 'package:chat_app/ui/screens/chats/chats_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,7 @@ class SignUpController extends GetxController {
   var isLoading = false.obs;
   late AuthRepository auth;
   final formKey = GlobalKey<FormState>();
+  final db = FirebaseFirestore.instance;
 
   String? validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
@@ -53,6 +55,22 @@ class SignUpController extends GetxController {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
       try {
+
+        final isTaken = await authRepository.isUsernameTaken(
+          usernameController.text.trim(),
+        );
+        if (isTaken) {
+          Get.snackbar(
+            'Error',
+            'Username already taken. Please choose another one.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          isLoading.value = false;
+          return;
+        }
+
         final response = await authRepository.signUp(
           emailController.text.trim(),
           passwordController.text.trim(),
@@ -72,8 +90,8 @@ class SignUpController extends GetxController {
 
         Get.snackbar('Success', 'Account created successfully.');
         Get.delete<SignUpController>();
-        Get.offAll(() => LoginScreen());
-        Get.delete<SignUpController>();
+        Get.offAll(() => ChatsScreen());
+        
       } catch (e) {
         Get.snackbar(
           duration: Duration(seconds: 20),

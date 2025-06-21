@@ -22,6 +22,7 @@ class ChatApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          theme: ThemeData(useMaterial3: true),
           debugShowCheckedModeBanner: false,
           home: Wrapper(),
         );

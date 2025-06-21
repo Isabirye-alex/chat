@@ -10,6 +10,7 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
   var isLoading = false.obs;
 
   String? validateNotEmpty(String? value, String fieldName) {
@@ -41,9 +42,26 @@ class LoginController extends GetxController {
       isLoading.value = true;
 
       try {
-        // Step 1: Log in
+        
+          final email = await authRepository.getEmailByUsername(
+          usernameController.text.trim(),
+        );
+
+        if (email == null) {
+          Get.snackbar(
+            'Login Failed',
+            'No user found with that username.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          isLoading.value = false;
+          return;
+        }
+        
+
         await authRepository.logIn(
-          emailController.text.trim(),
+          email,
           passwordController.text.trim(),
         );
 
@@ -60,10 +78,10 @@ class LoginController extends GetxController {
           );
           return;
         }
-        // Optional: You can store `user` globally using a GetX controller or some other state management
+
 
         Get.snackbar('Success', 'Logged in as ${user.firstName}');
-        // Get.delete<LoginController>();
+    
         Get.delete<LoginController>();
         Get.offAll(() => ChatsScreen());
       } catch (e) {
