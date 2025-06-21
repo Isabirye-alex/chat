@@ -7,15 +7,14 @@ class CustomSearchBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 1.sw * 0.85,
+      width: 1.sw ,
       decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(10.h),
         border: Border.all(color: Colors.transparent)
       ),
       child: Padding(
-        padding: EdgeInsets.all(8.w),
+        padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: SearchBar(
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
           hintText: 'Search',
           onChanged: (value){},
           onTapOutside: (value){},

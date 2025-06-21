@@ -1,10 +1,9 @@
-import 'package:chat_app/core/services/auth_services/logout.dart';
 import 'package:chat_app/ui/screens/account_settings.dart';
 import 'package:chat_app/ui/screens/chats/chat_tile.dart';
 import 'package:chat_app/ui/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -44,26 +43,28 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 
               });
             },
+            
             currentIndex: selectedIndex,
-          
+            selectedItemColor: Colors.grey,
+            selectedIconTheme: IconThemeData(color: Colors.yellow),
             items: [
               BottomNavigationBarItem(icon: Padding(
                 padding: EdgeInsets.only(top: 10.h),
                 child: Icon(Icons.message),
               ),
-              label: ''
+              label: 'Chats'
             ),
               BottomNavigationBarItem(icon: Padding(
                 padding: EdgeInsets.only(top:10.h),
-                child: Icon(Icons.message),
+                child: Icon(Icons.person),
               ),
-              label: ''
+              label: 'Profile'
               ),
               BottomNavigationBarItem(icon: Padding(
                 padding: EdgeInsets.only(top: 10.h),
-                child: Icon(Icons.message),
+                child: Icon(Icons.manage_accounts_sharp),
               ),
-              label: ''
+              label: 'Settings'
               )
             ],
           ),
