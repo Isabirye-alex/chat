@@ -84,6 +84,7 @@ class SignUpController extends GetxController {
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
             imageUrl: '',
+            formttedName: '$firstNameController $lastNameController'
           );
           await authRepository.saveUser(user.toMap());
         }

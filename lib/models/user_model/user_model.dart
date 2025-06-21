@@ -13,8 +13,9 @@ class UserModel {
   final String? email;
   final String? password;
   final String? userName;
-  final String uid;
+  final String? uid;
   final String? imageUrl;
+  final String? formttedName;
 
   UserModel({
     this.email,
@@ -22,8 +23,9 @@ class UserModel {
     this.lastName,
     this.password,
     this.userName,
-    required this.uid,
-    this.imageUrl
+    this.uid,
+    this.imageUrl,
+    this.formttedName
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class UserModel {
       'userName': userName,
       'uid': uid,
       'imageUrl': imageUrl,
+      'formttedName': formttedName,
     };
   }
 
@@ -45,8 +48,9 @@ class UserModel {
       email: map['email'] != null ? map['email'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
       userName: map['userName'] != null ? map['userName'] as String : null,
-      uid: map['uid'] as String,
+      uid: map['uid'] != null ? map['uid'] as String : null,
       imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
+      formttedName: map['formttedName'] != null ? map['formttedName'] as String : null,
     );
   }
 

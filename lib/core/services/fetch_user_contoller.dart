@@ -9,13 +9,19 @@ class FetchUserController extends GetxController {
   final RxList<UserModel> users = <UserModel>[].obs;
   final RxBool isLoading = true.obs;
   final RxString error = ''.obs;
-
   final AuthRepository db = AuthRepository();
+  List<UserModel> filteredUsers = <UserModel>[].obs;
+  // final debounce = RxString('').debounceTime(const Duration(milliseconds: 300));
+  var searchText = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Listen to Firebase auth state changes
+    debounce<String>(
+      searchText,(val) => search(val),
+      time: Duration(milliseconds: 300),
+    );
+  
     FirebaseAuth.instance.authStateChanges().listen((User? firebaseUser) async {
       if (firebaseUser != null) {
         try {
@@ -40,6 +46,20 @@ class FetchUserController extends GetxController {
         error.value = 'No user signed in';
       }
     });
+  }
+
+  void search(String text) {
+    if (text.trim().isEmpty) {
+      filteredUsers.clear();
+    } else {
+      filteredUsers.assignAll(
+        users.where(
+          (e) =>
+              (e.firstName ?? '').toLowerCase().contains(text.toLowerCase()) ||
+              (e.lastName ?? '').toLowerCase().contains(text.toLowerCase()),
+        ),
+      );
+    }
   }
 
   Future fetchUsers(String uid) async {

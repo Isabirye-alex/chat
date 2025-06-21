@@ -1,5 +1,7 @@
+import 'package:chat_app/core/services/chat_service_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ChatsTextField extends StatefulWidget {
   const ChatsTextField({super.key});
@@ -11,6 +13,7 @@ class ChatsTextField extends StatefulWidget {
 class _ChatsTextFieldState extends State<ChatsTextField> {
   @override
   Widget build(BuildContext context) {
+    final message = Get.put(ChatServiceContoller());
     return Container(
       height: 60,
       decoration: BoxDecoration(
@@ -38,10 +41,13 @@ class _ChatsTextFieldState extends State<ChatsTextField> {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: TextField(
+                controller: message.messageController,
                 decoration: InputDecoration(
                   hint: Text('Write message....'),
                   suffixIcon: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      message.saveMessages();
+                    },
                     icon: Icon(Icons.send),
                   ),
                   border: InputBorder.none,
