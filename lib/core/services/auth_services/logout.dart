@@ -12,7 +12,7 @@ class LogoutController extends GetxController {
     try {
       isLoading.value = true;
       await _authRepo.logOut();
-      Get.offAll(() => const LoginScreen()); 
+      Get.offAll(() => LoginScreen()); 
     } catch (e) {
       Get.snackbar('Logout Failed', e.toString());
     } finally {

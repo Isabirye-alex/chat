@@ -62,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 validator: (value) => controller
                                     .validateNotEmpty(value, 'First Name'),
                                 labelText: 'First Name',
+                                prefixIcon: Icons.person,
                               ),
                             ),
                             8.horizontalSpace,
@@ -72,12 +73,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 validator: (value) => controller
                                     .validateNotEmpty(value, 'Last Name'),
                                 labelText: 'Last Name',
+                                prefixIcon: Icons.person_outline_outlined,
                               ),
                             ),
                           ],
                         ),
                         8.verticalSpace,
                         CustomTextField(
+                          prefixIcon: Icons.email,
                           controller: controller.emailController,
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Email'),
@@ -89,6 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Username'),
                           labelText: 'Username',
+                          prefixIcon: Icons.person_4_outlined,
                         ),
                         8.verticalSpace,
                         CustomTextField(
@@ -106,6 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (value) =>
                               controller.validatePassword(value),
                           labelText: 'Password',
+                          prefixIcon: Icons.password,
                         ),
                         8.verticalSpace,
                         CustomTextField(
@@ -124,6 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: (value) =>
                               controller.validateConfirmPassword(value),
                           labelText: 'Confirm your password',
+                          prefixIcon: Icons.password,
                         ),
                       ],
                     ),
@@ -146,7 +152,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontSize: 18,
                     text: 'Already have an account? Log in',
                     textColor: Colors.blue,
-                    callBack: () => Get.off(() => LoginScreen(), binding: SignUpBindings()),
+                    callBack: () =>
+                        Get.off(() => LoginScreen(), binding: SignUpBindings()),
                   ),
                 ],
               ),
@@ -156,6 +163,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-
 }

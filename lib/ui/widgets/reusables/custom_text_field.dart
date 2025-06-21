@@ -10,7 +10,8 @@ class CustomTextField extends StatelessWidget {
     this.isObscureText = false,
     this.iconCallBack,
     this.iconData,
-    this.charcterType
+    this.charcterType,
+    this.prefixIcon
   });
 
   final String? labelText;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? iconCallBack;
   final IconData? iconData;
   final String? charcterType;
+  final IconData? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class CustomTextField extends StatelessWidget {
       maxLines: 1,
       obscureText: isObscureText,
       decoration: InputDecoration(
+        prefixIcon: Icon(prefixIcon),
         suffixIcon: IconButton(onPressed: iconCallBack, icon: Icon(iconData)),
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.r)),

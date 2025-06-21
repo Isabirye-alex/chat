@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           validator: (value) =>
                               controller.validateNotEmpty(value, 'Email'),
                           labelText: 'Enter your Username',
+                          prefixIcon: Icons.person_4_outlined,
                         ),
                         8.verticalSpace,
                         CustomTextField(
@@ -70,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               : Icons.visibility_off,
                           isObscureText: isPasswordHidden,
                           charcterType: '*',
+                          prefixIcon: Icons.password,
                           controller: controller.passwordController,
                           validator: (value) =>
                               controller.validatePassword(value),
