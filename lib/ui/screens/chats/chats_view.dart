@@ -1,4 +1,8 @@
+import 'package:chat_app/ui/widgets/chat_bubble.dart';
+import 'package:chat_app/ui/widgets/chat_view_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ChatsView extends StatelessWidget {
   const ChatsView({super.key});
@@ -7,92 +11,74 @@ class ChatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text('Isabirye Alex'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Icon(Icons.more_vert),
-          ),
-        ],
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              margin: EdgeInsets.only(left: 15.w),
+              padding: EdgeInsets.all(2.w),
+              child: GestureDetector(
+                onTap: () => Get.back(),
+                child: Icon(Icons.arrow_back),
+              ), 
+            ),
+            20.horizontalSpace,
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.green,
+                  child: Text('IA', style: TextStyle(color: Colors.white)),
+                ),
+                10.horizontalSpace,
+                Text(
+                  'Isabirye Alex',
+                  style: TextStyle(color: const Color.fromARGB(255, 4, 24, 40)),
+                ),
+              ],
+            ),
+            Spacer(),
+            Container(
+              padding: EdgeInsets.all(2.w),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              margin: EdgeInsets.only(right: 10.w),
+              child: Icon(Icons.more_vert),
+            ),
+          ],
+        ),
       ),
+
       body: Stack(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return SizedBox();
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox();
-                  },
-                  itemCount: 10,
-                ),
-              ),
-            ],
-          ),
-          Positioned(bottom: 0, left: 0, right: 0, child: ChatsTextField()),
-        ],
-      ),
-    );
-  }
-}
-
-class ChatsTextField extends StatefulWidget {
-  const ChatsTextField({super.key});
-
-  @override
-  State<ChatsTextField> createState() => _ChatsTextFieldState();
-}
-
-class _ChatsTextFieldState extends State<ChatsTextField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-        color: Colors.grey,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(),
-              child: Icon(Icons.add),
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: Container(
-              decoration: BoxDecoration(color: Colors.transparent),
-              child: TextField(
-                decoration: InputDecoration(
-                  hint: Text('Write message'),
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.send),
+          Container(
+            margin: EdgeInsets.only(bottom: 10.h),
+            child: Column(
+              children: [
+                10.verticalSpace,
+                Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return ChatBubble(isCurrentUser: false);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 5);
+                    },
+                    itemCount: 50,
                   ),
-                  disabledBorder: OutlineInputBorder(),
                 ),
-              ),
+                50.verticalSpace,
+              ],
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.only(right: 16),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.mic_rounded),
-              ),
-            ),
-          ),
+          // 40.verticalSpace,
+          Positioned(bottom: 0, left: 0, right: 0, child: ChatsTextField()),
         ],
       ),
     );

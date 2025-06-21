@@ -1,7 +1,7 @@
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/material.dart';
 
 class AuthRepository {
   final db = FirebaseFirestore.instance;
@@ -34,7 +34,6 @@ class AuthRepository {
     return response;
   }
 
-  
   Future<bool> isUsernameTaken(String username) async {
     final query = await db
         .collection('users')
@@ -57,13 +56,12 @@ class AuthRepository {
         final userData = querySnapshot.docs.first.data();
         return userData['email'] as String?;
       } else {
-        return null; 
+        return null;
       }
     } catch (e) {
       throw Exception('Error fetching email by username: $e');
     }
   }
-
 
   Future saveUser(Map<String, dynamic> userData) async {
     await db.collection('users').doc(userData['uid']).set(userData);
@@ -80,6 +78,20 @@ class AuthRepository {
       throw Exception('Error! User Data could not be loaded');
     }
     return null;
+  }
+
+  Future<List<Map<String, dynamic>>?> fetchUsers(String currentUserId) async {
+    try {
+      final response = await db
+          .collection('users')
+          .where('uid', isNotEqualTo: currentUserId)
+          .get();
+
+      return response.docs.map((e) => e.data()).toList();
+    } catch (e) {
+      debugPrint('Error fetching users from the database');
+      rethrow;
+    }
   }
 
   Future<UserModel?> getCurrentUserDetails() async {
