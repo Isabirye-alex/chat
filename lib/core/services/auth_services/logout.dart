@@ -1,6 +1,6 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 
 class LogoutController extends GetxController {
   static LogoutController get instance => Get.find();
@@ -12,9 +12,11 @@ class LogoutController extends GetxController {
     try {
       isLoading.value = true;
       await _authRepo.logOut();
-      Get.offAll(() => LoginScreen()); 
+      debugPrint('Logout completed');
+      // Get.offAll(() => LoginScreen()); // Force navigation to LoginScreen
     } catch (e) {
       Get.snackbar('Logout Failed', e.toString());
+      debugPrint('Logout error: $e');
     } finally {
       isLoading.value = false;
     }

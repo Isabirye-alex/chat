@@ -1,9 +1,8 @@
 import 'package:chat_app/models/message_model/message_model.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatServiceContoller extends GetxController {
   final messageController = TextEditingController();
@@ -44,7 +43,7 @@ class ChatServiceContoller extends GetxController {
         });
   }
 
-MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
+  MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
     final status = doc.metadata.hasPendingWrites
@@ -53,11 +52,6 @@ MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
 
     return MessageModel.fromMap(data).copyWith(status: status);
   }
-
-
-
- 
-
 
   Future<void> saveMessages() async {
     if (chatRoomId.isEmpty) throw Exception('chatRoomId is empty');
@@ -72,15 +66,10 @@ MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
       status: MessageStatus.sending, // Step 1: Initial status
     );
 
-    // Step 2: Add message locally
-    messages.insert(
-      0,
-      message,
-    ); // add to beginning since you're reversing in UI
+    messages.insert(0, message);
     messageController.clear();
 
     try {
-      // Step 3: Send to Firestore
       await FirebaseFirestore.instance
           .collection('chats')
           .doc(chatRoomId)
@@ -88,13 +77,11 @@ MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
           .doc(message.id)
           .set(message.copyWith(status: MessageStatus.sent).toMap());
 
-      // Optional: update local message to 'sent' if you want instant local feedback
       final index = messages.indexWhere((m) => m.id == message.id);
       if (index != -1) {
         messages[index] = messages[index].copyWith(status: MessageStatus.sent);
       }
     } catch (e) {
-      // Step 4: Update message status to failed
       final index = messages.indexWhere((m) => m.id == message.id);
       if (index != -1) {
         messages[index] = messages[index].copyWith(
@@ -104,5 +91,4 @@ MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
       debugPrint('Message sending failed: $e');
     }
   }
-
 }

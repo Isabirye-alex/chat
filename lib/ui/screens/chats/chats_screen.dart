@@ -4,7 +4,6 @@ import 'package:chat_app/ui/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
 
@@ -13,12 +12,8 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
-  int selectedIndex = 0;
-   List<Widget> pages = [
-    ChatTile(),
-    ProfilePage(),
-    AccountSettings(),
-  ];
+  int selectedIndex = 1;
+  List<Widget> pages = [ChatTile(), ProfilePage(), AccountSettings()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +24,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
-          boxShadow:[ BoxShadow(spreadRadius: 0, blurRadius: 10, color: Colors.black38)]
+          boxShadow: [
+            BoxShadow(spreadRadius: 0, blurRadius: 10, color: Colors.black38),
+          ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
@@ -37,45 +34,43 @@ class _ChatsScreenState extends State<ChatsScreen> {
             topRight: Radius.circular(30),
           ),
           child: BottomNavigationBar(
-            onTap:(value){
+            onTap: (value) {
               selectedIndex = value;
-              setState(() {
-                
-              });
+              setState(() {});
             },
-            
+
             currentIndex: selectedIndex,
             selectedItemColor: Colors.grey,
             selectedIconTheme: IconThemeData(color: Colors.yellow),
             items: [
-              BottomNavigationBarItem(icon: Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: Icon(Icons.message),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(top: 10.h),
+                  child: Icon(Icons.message),
+                ),
+                label: 'Chats',
               ),
-              label: 'Chats'
-            ),
-              BottomNavigationBarItem(icon: Padding(
-                padding: EdgeInsets.only(top:10.h),
-                child: Icon(Icons.person),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(top: 10.h),
+                  child: Icon(Icons.person),
+                ),
+                label: 'Profile',
               ),
-              label: 'Profile'
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(top: 10.h),
+                  child: Icon(Icons.manage_accounts_sharp),
+                ),
+                label: 'Settings',
               ),
-              BottomNavigationBarItem(icon: Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: Icon(Icons.manage_accounts_sharp),
-              ),
-              label: 'Settings'
-              )
             ],
           ),
         ),
       ),
-      
+
       //Body to display the selected page on the bottom navigation menu
       body: pages[selectedIndex],
     );
   }
 }
-
-
-

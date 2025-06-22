@@ -63,60 +63,67 @@ class ChatTile extends StatelessWidget {
                       const SizedBox(height: 5),
                   itemBuilder: (context, index) {
                     final user = usersToDisplay[index];
-                    return GestureDetector(
-                      onTap: () => Get.to(
-                        () => ChatsView(
-                          user: user, // current tapped user
-                          receiver:
-                              user, // assuming the tapped user is the receiver
-                          sender: controller
-                              .currentUser
-                              .value!, // your app's current logged-in user
-                        ),
+                    return Container(
+                      padding: EdgeInsets.all(2.w),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[100],
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
-
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.only(
-                          right: 8,
-                          left: 8,
-                        ),
-                        splashColor: Colors.amber,
-                        minLeadingWidth: 0,
-                        horizontalTitleGap: 10,
-                        hoverColor: Colors.blue,
-                        visualDensity: const VisualDensity(
-                          vertical: -4,
-                          horizontal: -4,
-                        ),
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.green,
-                          radius: 30,
-                          child: Text(
-                            user.firstName?[0].toUpperCase() ?? '',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: GestureDetector(
+                        onTap: () => Get.to(
+                          () => ChatsView(
+                            user: user, // current tapped user
+                            receiver:
+                                user, // assuming the tapped user is the receiver
+                            sender: controller
+                                .currentUser
+                                .value!, // your app's current logged-in user
                           ),
                         ),
-                        title: Text(
-                          '${user.firstName ?? ''} ${user.lastName ?? ''}',
-                          style: const TextStyle(fontWeight: FontWeight.w300),
-                        ),
-                        subtitle: const Text('Message'),
-                        trailing: Column(
-                          children: [
-                            const Text('08:36AM'),
-                            Container(
-                              height: 20,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(20),
+
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.only(
+                            right: 8,
+                            left: 8,
+                          ),
+                          splashColor: Colors.amber,
+                          minLeadingWidth: 0,
+                          horizontalTitleGap: 10,
+                          hoverColor: Colors.blue,
+                          visualDensity: const VisualDensity(
+                            vertical: -4,
+                            horizontal: -4,
+                          ),
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.green,
+                            radius: 30,
+                            child: Text(
+                              user.firstName?[0].toUpperCase() ?? '',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
-                              child: const Center(child: Text('10')),
                             ),
-                          ],
+                          ),
+                          title: Text(
+                            '${user.firstName ?? ''} ${user.lastName ?? ''}',
+                            style: const TextStyle(fontWeight: FontWeight.w300),
+                          ),
+                          subtitle: const Text('Message'),
+                          trailing: Column(
+                            children: [
+                              const Text('08:36AM'),
+                              Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Center(child: Text('10')),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

@@ -1,6 +1,6 @@
 import 'package:chat_app/models/user_model/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthRepository {
@@ -23,10 +23,14 @@ class AuthRepository {
     return response;
   }
 
-  Future logOut() async {
-    final response = await auth.signOut();
-
-    return response;
+  Future<void> logOut() async {
+    try {
+      await auth.signOut();
+      debugPrint('User signed out successfully');
+    } catch (e) {
+      debugPrint('Error during sign-out: $e');
+      rethrow; // Rethrow to allow the caller to handle the error
+    }
   }
 
   Future resetPassword(String email) async {

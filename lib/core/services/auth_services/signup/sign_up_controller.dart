@@ -1,11 +1,11 @@
 import 'dart:io';
+
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:chat_app/ui/screens/chats/chats_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
@@ -57,7 +57,6 @@ class SignUpController extends GetxController {
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
       try {
-
         final isTaken = await authRepository.isUsernameTaken(
           usernameController.text.trim(),
         );
@@ -78,11 +77,10 @@ class SignUpController extends GetxController {
           passwordController.text.trim(),
         );
 
-          
-        String? imageUrl = '';
-        if (imageFile != null) {
-          imageUrl = await uploadImageToSupabase(imageFile, response.user!.uid);
-        }
+        // String? imageUrl = '';
+        // if (imageFile != null) {
+        //   imageUrl = await uploadImageToSupabase(imageFile, response.user!.uid);
+        // }
 
         if (response != null) {
           UserModel user = UserModel(
@@ -92,8 +90,8 @@ class SignUpController extends GetxController {
             userName: usernameController.text.trim(),
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
-            imageUrl: imageUrl ?? '',
-            formttedName: '$firstNameController $lastNameController'
+            imageUrl: '',
+            formttedName: '$firstNameController $lastNameController',
           );
           await authRepository.saveUser(user.toMap());
         }
@@ -101,7 +99,6 @@ class SignUpController extends GetxController {
         Get.snackbar('Success', 'Account created successfully.');
         Get.delete<SignUpController>();
         Get.offAll(() => ChatsScreen());
-        
       } catch (e) {
         Get.snackbar(
           duration: Duration(seconds: 20),
@@ -120,26 +117,26 @@ class SignUpController extends GetxController {
     }
   }
 
-  Future<String?> uploadImageToSupabase(File file, String userId) async {
-    final supabase = Supabase.instance.client;
-    final filePath =
-        'avatars/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-    final fileBytes = await file.readAsBytes();
-
-    final response = await supabase.storage
-        .from('avatars')
-        .uploadBinary(
-          filePath,
-          fileBytes,
-          fileOptions: const FileOptions(contentType: 'image/jpeg'),
-        );
-
-    if (response.isEmpty) return null;
-
-    final imageUrl = supabase.storage.from('avatars').getPublicUrl(filePath);
-    return imageUrl;
-  }
+  // Future<String?> uploadImageToSupabase(File file, String userId) async {
+  //   final supabase = Supabase.instance.client;
+  //   final filePath =
+  //       'avatars/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg';
+  //
+  //   final fileBytes = await file.readAsBytes();
+  //
+  //   final response = await supabase.storage
+  //       .from('avatars')
+  //       .uploadBinary(
+  //         filePath,
+  //         fileBytes,
+  //         fileOptions: const FileOptions(contentType: 'image/jpeg'),
+  //       );
+  //
+  //   if (response.isEmpty) return null;
+  //
+  //   final imageUrl = supabase.storage.from('avatars').getPublicUrl(filePath);
+  //   return imageUrl;
+  // }
 
   @override
   void onClose() {
