@@ -69,36 +69,39 @@ MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
       receiver: receiver.uid,
       sender: sender.uid,
       content: messageController.text.trim(),
-      status: MessageStatus.sending,
+      status: MessageStatus.sending, // Step 1: Initial status
     );
 
-    messages.insert(0, message); // Add to UI instantly
+    // Step 2: Add message locally
+    messages.insert(
+      0,
+      message,
+    ); // add to beginning since you're reversing in UI
     messageController.clear();
 
     try {
+      // Step 3: Send to Firestore
       await FirebaseFirestore.instance
           .collection('chats')
           .doc(chatRoomId)
           .collection('messages')
           .doc(message.id)
-          .set(message.toMap());
+          .set(message.copyWith(status: MessageStatus.sent).toMap());
 
-      // Delay checker: if not confirmed as sent after 15 seconds, set to failed
-      Future.delayed(const Duration(seconds: 15), () {
-        final index = messages.indexWhere((m) => m.id == message.id);
-        if (index != -1 && messages[index].status == MessageStatus.sending) {
-          messages[index] = messages[index].copyWith(
-            status: MessageStatus.failed,
-          );
-        }
-      });
+      // Optional: update local message to 'sent' if you want instant local feedback
+      final index = messages.indexWhere((m) => m.id == message.id);
+      if (index != -1) {
+        messages[index] = messages[index].copyWith(status: MessageStatus.sent);
+      }
     } catch (e) {
+      // Step 4: Update message status to failed
       final index = messages.indexWhere((m) => m.id == message.id);
       if (index != -1) {
         messages[index] = messages[index].copyWith(
           status: MessageStatus.failed,
         );
       }
+      debugPrint('Message sending failed: $e');
     }
   }
 

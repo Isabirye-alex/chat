@@ -1,5 +1,3 @@
-// ignore_for_file: unreachable_switch_default
-
 import 'package:chat_app/models/message_model/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,7 +43,7 @@ class ChatBubble extends StatelessWidget {
     final formattedTime = DateFormat('hh:mm a').format(message.createdAt!);
     final fullDateTime = '$formattedDate ($formattedTime)';
 
-    Widget statusIcon() {
+        Widget statusIcon() {
       switch (message.status) {
         case MessageStatus.sending:
           return SizedBox(
@@ -59,18 +57,12 @@ class ChatBubble extends StatelessWidget {
         case MessageStatus.sent:
           return Icon(Icons.check, size: 16.w, color: Colors.greenAccent);
         case MessageStatus.failed:
-          return Tooltip(
-            message: 'Failed to send',
-            child: Icon(
-              Icons.warning_amber_rounded,
-              size: 16.w,
-              color: Colors.redAccent,
-            ),
-          );
+          return Icon(Icons.error, size: 16.w, color: Colors.redAccent);
         default:
           return const SizedBox.shrink();
       }
     }
+
 
     return Align(
       alignment: alignment,
@@ -100,7 +92,10 @@ class ChatBubble extends StatelessWidget {
                   children: [
                     Text(
                       fullDateTime,
-                      style: TextStyle(color: Colors.black, fontSize: 10.sp),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10.sp,
+                      ),
                     ),
                     SizedBox(width: 6.w),
                     if (isCurrentUser) statusIcon(),

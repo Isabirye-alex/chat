@@ -8,6 +8,11 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Supabase.initialize(
+  url: 'https://<your-project-id>.supabase.co',
+  anonKey: '<your-anon-key>',
+);
+
   runApp(const ChatApp());
 }
 

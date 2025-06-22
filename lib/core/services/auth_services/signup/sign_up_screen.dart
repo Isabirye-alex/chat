@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:chat_app/core/services/auth_services/login/login_screen.dart';
 import 'package:chat_app/core/services/auth_services/signup/sign_up_controller.dart';
 import 'package:chat_app/core/services/bindings/sign_up_bindings.dart';
+import 'package:chat_app/ui/widgets/image_picker.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_button.dart';
 import 'package:chat_app/ui/widgets/reusables/custom_text_field.dart';
@@ -19,12 +22,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
   final controller = Get.put(SignUpController());
+
+  File? image; // ✅ moved here
+
+  void selectImage() async {
+    final result = await Get.to<File>(() => const ImagePickerWidget());
+    if (result != null) {
+      setState(() {
+        image = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: SizedBox(
-          height: 0.85.sh,
           width: 1.sw,
           child: Center(
             child: Container(
@@ -53,6 +68,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     key: controller.formKey,
                     child: Column(
                       children: <Widget>[
+                        GestureDetector(
+                          onTap: selectImage,
+                          child: CircleAvatar(
+                            foregroundColor: Colors.green,
+                            radius: 50,
+                            backgroundColor: Colors.purple,
+                            backgroundImage: image != null
+                                ? FileImage(image!)
+                                : null,
+                            child: image == null
+                                ? const Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                        ),
+                        10.verticalSpace,
                         Row(
                           children: [
                             Expanded(
@@ -152,8 +185,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontSize: 18,
                     text: 'Already have an account? Log in',
                     textColor: Colors.blue,
-                    callBack: () =>
-                        Get.off(() => LoginScreen(), binding: SignUpBindings()),
+                    callBack: () => Get.off(
+                      () => const LoginScreen(),
+                      binding: SignUpBindings(),
+                    ),
                   ),
                 ],
               ),
