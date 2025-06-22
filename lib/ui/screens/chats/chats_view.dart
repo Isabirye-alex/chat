@@ -21,7 +21,6 @@ class ChatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final chatController = Get.put(ChatServiceContoller());
     chatController.init(receiver, sender);
-
     return Scaffold(
       appBar: AppBar(
         primary: true,
@@ -86,7 +85,7 @@ class ChatsView extends StatelessWidget {
                       itemCount: messages.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 5),
                       itemBuilder: (context, index) {
-                        final msg = messages[index];
+                        final msg = messages[index];                      
                         final isCurrentUser = msg.sender == sender.uid;
                         return ChatBubble(
                           isCurrentUser: isCurrentUser,

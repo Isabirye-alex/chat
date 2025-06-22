@@ -1,4 +1,3 @@
-import 'package:chat_app/core/services/chat_service.dart';
 import 'package:chat_app/models/message_model/message_model.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:get/get.dart';
@@ -7,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatServiceContoller extends GetxController {
-  final chatService = ChatService();
   final messageController = TextEditingController();
 
   late UserModel receiver;
   late UserModel sender;
   late String chatRoomId;
+  late Map<String, dynamic> isPedning;
+  // final isPending = true;
 
   final RxList<MessageModel> messages = <MessageModel>[].obs;
 
@@ -33,19 +33,31 @@ class ChatServiceContoller extends GetxController {
         .collection('chats')
         .doc(chatRoomId)
         .collection('messages')
-        .orderBy('createdAt', descending: false) // latest at top
+        .orderBy('createdAt', descending: false)
         .snapshots()
         .listen((snapshot) {
           messages.value = snapshot.docs
-              .map((doc) {
-                final data = doc.data();
-                return MessageModel.fromMap(data);
-              })
+              .map(_getStatusFromDoc)
               .toList()
               .reversed
-              .toList(); // reverse to show oldest first
+              .toList();
         });
   }
+
+MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+
+    final status = doc.metadata.hasPendingWrites
+        ? MessageStatus.sending
+        : MessageStatus.sent;
+
+    return MessageModel.fromMap(data).copyWith(status: status);
+  }
+
+
+
+ 
+
 
   Future<void> saveMessages() async {
     if (chatRoomId.isEmpty) throw Exception('chatRoomId is empty');
@@ -57,15 +69,37 @@ class ChatServiceContoller extends GetxController {
       receiver: receiver.uid,
       sender: sender.uid,
       content: messageController.text.trim(),
+      status: MessageStatus.sending,
     );
 
-    await FirebaseFirestore.instance
-        .collection('chats')
-        .doc(chatRoomId)
-        .collection('messages')
-        .doc(message.id)
-        .set(message.toMap());
-
+    messages.insert(0, message); // Add to UI instantly
     messageController.clear();
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(chatRoomId)
+          .collection('messages')
+          .doc(message.id)
+          .set(message.toMap());
+
+      // Delay checker: if not confirmed as sent after 15 seconds, set to failed
+      Future.delayed(const Duration(seconds: 15), () {
+        final index = messages.indexWhere((m) => m.id == message.id);
+        if (index != -1 && messages[index].status == MessageStatus.sending) {
+          messages[index] = messages[index].copyWith(
+            status: MessageStatus.failed,
+          );
+        }
+      });
+    } catch (e) {
+      final index = messages.indexWhere((m) => m.id == message.id);
+      if (index != -1) {
+        messages[index] = messages[index].copyWith(
+          status: MessageStatus.failed,
+        );
+      }
+    }
   }
+
 }
