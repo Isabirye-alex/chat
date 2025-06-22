@@ -12,7 +12,7 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
   List<Widget> pages = [ChatTile(), ProfilePage(), AccountSettings()];
   @override
   Widget build(BuildContext context) {

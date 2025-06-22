@@ -1,8 +1,9 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
+import 'package:chat_app/core/services/auth_services/logout.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:chat_app/ui/widgets/reusables/shape.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -31,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LogoutController());
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,6 +113,8 @@ class _ProfilePageState extends State<ProfilePage> {
             'Log Out',
             iconColor: Colors.red,
             textColor: Colors.red,
+            callBackAction: ()=>controller.logout(),
+            
           ),
           _tile(
             Icons.delete_outline,
@@ -128,6 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String title, {
     Color iconColor = Colors.black54,
     Color textColor = Colors.black,
+    VoidCallback? callBackAction,
   }) {
     return ListTile(
       minVerticalPadding: 0,
@@ -135,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
       leading: Icon(icon, color: iconColor),
       title: Text(title, style: TextStyle(color: textColor)),
       trailing: Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {},
+      onTap: callBackAction,
     );
   }
 
