@@ -176,7 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Sign up',
                       radius: 10.r,
                       textColor: Colors.white,
-                      callBack: () => controller.validateAndSubmit(),
+                      callBack: () => controller.validateAndSubmit(image),
                     ),
                   ),
                   10.verticalSpace,
