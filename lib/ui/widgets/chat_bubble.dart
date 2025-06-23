@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:chat_app/models/message_model/message_model.dart';
+import 'package:chat_app/utilis/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
-class ChatBubble extends StatelessWidget {
+
+class ChatBubble extends StatefulWidget {
   const ChatBubble({
     super.key,
     this.isCurrentUser = true,
@@ -14,12 +17,30 @@ class ChatBubble extends StatelessWidget {
   final MessageModel message;
 
   @override
+  State<ChatBubble> createState() => _ChatBubbleState();
+}
+
+class _ChatBubbleState extends State<ChatBubble> {
+  final message = MessageModel();
+
+  final Rx<DateTime> _now = DateTime.now().obs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Timer.periodic(Duration(seconds: 10), (_) {
+      _now.value = DateTime.now();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     late String text = '';
-    if (message.content!.isNotEmpty) {
-      text = message.content!;
+    if (widget.message.content!.isNotEmpty) {
+      text = widget.message.content!;
     }
-    final borderRadius = isCurrentUser
+    final borderRadius = widget.isCurrentUser
         ? BorderRadius.only(
             topLeft: Radius.circular(16.r),
             bottomLeft: Radius.circular(16.r),
@@ -31,16 +52,11 @@ class ChatBubble extends StatelessWidget {
             bottomRight: Radius.circular(16.r),
           );
 
-    final alignment = isCurrentUser
+    final alignment = widget.isCurrentUser
         ? Alignment.centerRight
         : Alignment.centerLeft;
-
-    final formattedDate = DateFormat('MMM d, y').format(message.createdAt!);
-    final formattedTime = DateFormat('hh:mm a').format(message.createdAt!);
-    final fullDateTime = '$formattedDate ($formattedTime)';
-
     Widget statusIcon() {
-      switch (message.status) {
+      switch (widget.message.status) {
         case MessageStatus.sending:
           return SizedBox(
             width: 14.w,
@@ -65,7 +81,7 @@ class ChatBubble extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 10.w),
         padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-          color: isCurrentUser ? Colors.green[400] : Colors.grey,
+          color: widget.isCurrentUser ? Colors.green[400] : Colors.grey,
           borderRadius: borderRadius,
         ),
         child: ConstrainedBox(
@@ -75,7 +91,7 @@ class ChatBubble extends StatelessWidget {
           ),
           child: IntrinsicWidth(
             child: Column(
-              crossAxisAlignment: isCurrentUser
+              crossAxisAlignment: widget.isCurrentUser
                   ? CrossAxisAlignment.end
                   : CrossAxisAlignment.end,
               children: [
@@ -85,12 +101,15 @@ class ChatBubble extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      fullDateTime,
-                      style: TextStyle(color: Colors.black, fontSize: 10.sp),
+                    Obx(
+                      () => Text(
+                        formatTimestamp(widget.message.createdAt!, _now.value),
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ),
+
                     SizedBox(width: 6.w),
-                    if (isCurrentUser) statusIcon(),
+                    if (widget.isCurrentUser) statusIcon(),
                   ],
                 ),
               ],

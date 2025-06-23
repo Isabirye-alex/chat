@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:chat_app/core/services/fetch_user_contoller.dart';
 import 'package:chat_app/ui/screens/chats/chats_view.dart';
 import 'package:chat_app/ui/widgets/search_box.dart';
+import 'package:chat_app/utilis/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,6 +16,17 @@ class ChatTile extends StatefulWidget {
 }
 
 class _ChatTileState extends State<ChatTile> {
+  final Rx<DateTime> _now = DateTime.now().obs;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Timer.periodic(Duration(seconds: 10), (_) {
+      _now.value = DateTime.now();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FetchUserController());
@@ -68,7 +82,7 @@ class _ChatTileState extends State<ChatTile> {
                       const SizedBox(height: 5),
                   itemBuilder: (context, index) {
                     final user = usersToDisplay[index];
-                    
+
                     return Container(
                       padding: EdgeInsets.all(2.w),
                       decoration: BoxDecoration(
@@ -132,7 +146,16 @@ class _ChatTileState extends State<ChatTile> {
 
                           trailing: Column(
                             children: [
-                              Text('08:50 AM'),
+                              Obx(
+                                () => Text(
+                                  formatTimestamp(
+                                    user.lastMessage?['timeStamp'],
+                                    _now.value,
+                                  ),
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+
                               Container(
                                 height: 20,
                                 width: 20,

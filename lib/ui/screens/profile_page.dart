@@ -1,9 +1,11 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
 import 'package:chat_app/core/services/auth_services/logout.dart';
+import 'package:chat_app/core/services/bindings/log_out_bindings.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
 import 'package:chat_app/ui/widgets/reusables/shape.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -113,8 +115,9 @@ class _ProfilePageState extends State<ProfilePage> {
             'Log Out',
             iconColor: Colors.red,
             textColor: Colors.red,
-            callBackAction: ()=>controller.logout(),
-            
+            callBackAction: () {
+              Get.to(() => controller.logout(), binding: LogOutBindings());
+            },
           ),
           _tile(
             Icons.delete_outline,
