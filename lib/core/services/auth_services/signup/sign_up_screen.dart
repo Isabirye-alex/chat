@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isConfirmPasswordHidden = true;
   final controller = Get.put(SignUpController());
 
-  File? image; // ✅ moved here
+  File? image;
 
   void selectImage() async {
     final result = await Get.to<File>(() => const ImagePickerWidget());
@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       children: <Widget>[
                         GestureDetector(
-                          // onTap: selectImage,
+                          onTap: selectImage,
                           child: CircleAvatar(
                             foregroundColor: Colors.green,
                             radius: 50,

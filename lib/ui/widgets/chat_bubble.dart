@@ -18,11 +18,7 @@ class ChatBubble extends StatelessWidget {
     late String text = '';
     if (message.content!.isNotEmpty) {
       text = message.content!;
-    } else {
-      text =
-          'Good evening. It has been a really productive project. Can\'t wait to get onto other projects ';
     }
-
     final borderRadius = isCurrentUser
         ? BorderRadius.only(
             topLeft: Radius.circular(16.r),
@@ -43,7 +39,7 @@ class ChatBubble extends StatelessWidget {
     final formattedTime = DateFormat('hh:mm a').format(message.createdAt!);
     final fullDateTime = '$formattedDate ($formattedTime)';
 
-        Widget statusIcon() {
+    Widget statusIcon() {
       switch (message.status) {
         case MessageStatus.sending:
           return SizedBox(
@@ -62,7 +58,6 @@ class ChatBubble extends StatelessWidget {
           return const SizedBox.shrink();
       }
     }
-
 
     return Align(
       alignment: alignment,
@@ -86,16 +81,13 @@ class ChatBubble extends StatelessWidget {
               children: [
                 Text(text, style: TextStyle(color: Colors.white)),
                 4.verticalSpace,
-                                Row(
+                Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       fullDateTime,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 10.sp,
-                      ),
+                      style: TextStyle(color: Colors.black, fontSize: 10.sp),
                     ),
                     SizedBox(width: 6.w),
                     if (isCurrentUser) statusIcon(),

@@ -74,7 +74,7 @@ class ChatTile extends StatelessWidget {
                           () => ChatsView(
                             user: user, // current tapped user
                             receiver:
-                                user, // assuming the tapped user is the receiver
+                                user, // tapped user is the receiver
                             sender: controller
                                 .currentUser
                                 .value!, // your app's current logged-in user
