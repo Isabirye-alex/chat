@@ -1,5 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 /// A model class representing a user in the chat application.
 ///
@@ -15,7 +16,6 @@ class UserModel {
   final String? userName;
   final String? uid;
   final String? imageUrl;
-  final String? formttedName;
 
   UserModel({
     this.email,
@@ -25,7 +25,6 @@ class UserModel {
     this.userName,
     this.uid,
     this.imageUrl,
-    this.formttedName
   });
 
   Map<String, dynamic> toMap() {
@@ -37,7 +36,6 @@ class UserModel {
       'userName': userName,
       'uid': uid,
       'imageUrl': imageUrl,
-      'formttedName': formttedName,
     };
   }
 
@@ -50,12 +48,35 @@ class UserModel {
       userName: map['userName'] != null ? map['userName'] as String : null,
       uid: map['uid'] != null ? map['uid'] as String : null,
       imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
-      formttedName: map['formttedName'] != null ? map['formttedName'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'UserModel(firstName: $firstName, lastName: $lastName, email: $email, password: $password, userName: $userName, uid: $uid, imageUrl: $imageUrl)';
+  }
+
+  UserModel copyWith({
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? password,
+    String? userName,
+    String? uid,
+    String? imageUrl,
+  }) {
+    return UserModel(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      userName: userName ?? this.userName,
+      uid: uid ?? this.uid,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }

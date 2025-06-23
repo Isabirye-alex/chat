@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: selectImage,
+                          // onTap: selectImage,
                           child: CircleAvatar(
                             foregroundColor: Colors.green,
                             radius: 50,

@@ -11,6 +11,7 @@ class ChatServiceContoller extends GetxController {
   late UserModel sender;
   late String chatRoomId;
   late Map<String, dynamic> isPedning;
+
   // final isPending = true;
 
   final RxList<MessageModel> messages = <MessageModel>[].obs;
@@ -55,14 +56,27 @@ class ChatServiceContoller extends GetxController {
 
   Future<void> saveMessages() async {
     if (chatRoomId.isEmpty) throw Exception('chatRoomId is empty');
-
+    late String? text;
+    final msg = messageController.text.trim();
+    if (msg.isNotEmpty) {
+      text = msg;
+      update();
+    } else {
+      Get.snackbar(
+        'Text field empty,',
+        'Enter some text',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blue,
+        duration: Duration(seconds: 5),
+      );
+    }
     final now = DateTime.now();
     final message = MessageModel(
       id: now.microsecondsSinceEpoch.toString(),
       createdAt: now,
       receiver: receiver.uid,
       sender: sender.uid,
-      content: messageController.text.trim(),
+      content: text,
       status: MessageStatus.sending, // Step 1: Initial status
     );
 
@@ -81,6 +95,12 @@ class ChatServiceContoller extends GetxController {
       if (index != -1) {
         messages[index] = messages[index].copyWith(status: MessageStatus.sent);
       }
+      await getLastMessage(
+        receiver.uid!,
+        sender.uid!,
+        message.content!,
+        now.microsecondsSinceEpoch,
+      );
     } catch (e) {
       final index = messages.indexWhere((m) => m.id == message.id);
       if (index != -1) {
@@ -89,6 +109,40 @@ class ChatServiceContoller extends GetxController {
         );
       }
       debugPrint('Message sending failed: $e');
+    }
+  }
+
+  getLastMessage(
+    String receiverUid,
+    String currentUid,
+    String message,
+    int timeStamp,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUid)
+          .update({
+            'lastMessage': {
+              'content': message,
+              'timeStamp': timeStamp,
+              'senderId': currentUid,
+            },
+          });
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUid)
+          .update({
+            'lastMessage': {
+              'content': message,
+              'timeStamp': timeStamp,
+              'senderId': currentUid,
+            },
+          });
+    } catch (e) {
+      rethrow;
+      // debugPrint('Message sending failed: $e');
     }
   }
 }

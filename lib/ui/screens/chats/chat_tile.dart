@@ -1,13 +1,20 @@
 import 'package:chat_app/core/services/fetch_user_contoller.dart';
+import 'package:chat_app/models/message_model/message_model.dart';
 import 'package:chat_app/ui/screens/chats/chats_view.dart';
 import 'package:chat_app/ui/widgets/search_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class ChatTile extends StatelessWidget {
+class ChatTile extends StatefulWidget {
   const ChatTile({super.key});
 
+  @override
+  State<ChatTile> createState() => _ChatTileState();
+}
+
+class _ChatTileState extends State<ChatTile> {
+  late MessageModel message;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FetchUserController());
@@ -66,15 +73,16 @@ class ChatTile extends StatelessWidget {
                     return Container(
                       padding: EdgeInsets.all(2.w),
                       decoration: BoxDecoration(
-                        color: Colors.blue[100],
+                        // color: Colors.grey,
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: GestureDetector(
                         onTap: () => Get.to(
                           () => ChatsView(
-                            user: user, // current tapped user
-                            receiver:
-                                user, // tapped user is the receiver
+                            user: user,
+                            // current tapped user
+                            receiver: user,
+                            // tapped user is the receiver
                             sender: controller
                                 .currentUser
                                 .value!, // your app's current logged-in user
@@ -99,7 +107,7 @@ class ChatTile extends StatelessWidget {
                             radius: 30,
                             child: Text(
                               user.firstName?[0].toUpperCase() ?? '',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -107,12 +115,18 @@ class ChatTile extends StatelessWidget {
                           ),
                           title: Text(
                             '${user.firstName ?? ''} ${user.lastName ?? ''}',
-                            style: const TextStyle(fontWeight: FontWeight.w300),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.blue,
+                            ),
                           ),
-                          subtitle: const Text('Message'),
+                          subtitle: Text(
+                            message.lastMessage ?? '',
+                            style: TextStyle(color: Colors.green),
+                          ),
                           trailing: Column(
                             children: [
-                              const Text('08:36AM'),
+                              Text('08:50 AM'),
                               Container(
                                 height: 20,
                                 width: 20,

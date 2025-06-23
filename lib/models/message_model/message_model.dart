@@ -10,6 +10,7 @@ class MessageModel {
   final String? sender;
   final DateTime? createdAt;
   final MessageStatus status;
+  final String? lastMessage;
 
   MessageModel({
     this.id,
@@ -18,6 +19,8 @@ class MessageModel {
     this.sender,
     this.createdAt,
     this.status = MessageStatus.sending,
+    this.lastMessage
+
   });
 
   MessageModel copyWith({
@@ -27,6 +30,7 @@ class MessageModel {
     String? sender,
     DateTime? createdAt,
     MessageStatus? status,
+    String? lastMessage,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -35,6 +39,7 @@ class MessageModel {
       sender: sender ?? this.sender,
       createdAt: createdAt ?? this.createdAt,
       status: status ?? this.status,
+      lastMessage: lastMessage ?? this.lastMessage,
     );
   }
 
@@ -46,6 +51,7 @@ class MessageModel {
       'sender': sender,
       'createdAt': createdAt?.millisecondsSinceEpoch,
       'status': status.name,
+      'lastMessage': lastMessage,
     };
   }
 
@@ -55,15 +61,14 @@ class MessageModel {
       content: map['content'] != null ? map['content'] as String : null,
       receiver: map['receiver'] != null ? map['receiver'] as String : null,
       sender: map['sender'] != null ? map['sender'] as String : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      status: map['status'] != null
+      createdAt: map['createdAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int) : null,
+       status: map['status'] != null
           ? MessageStatus.values.firstWhere(
               (e) => e.name == map['status'],
               orElse: () => MessageStatus.sending,
             )
           : MessageStatus.sending,
+      lastMessage: map['lastMessage'] != null ? map['lastMessage'] as String : null,
     );
   }
 
@@ -74,6 +79,6 @@ class MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, content: $content, receiver: $receiver, sender: $sender, createdAt: $createdAt, status: $status)';
+    return 'MessageModel(id: $id, content: $content, receiver: $receiver, sender: $sender, createdAt: $createdAt, status: $status, lastMessage: $lastMessage)';
   }
 }

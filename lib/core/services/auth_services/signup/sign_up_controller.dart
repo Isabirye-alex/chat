@@ -78,10 +78,10 @@ class SignUpController extends GetxController {
           passwordController.text.trim(),
         );
 
-        String? imageUrl = '';
-        if (imageFile != null) {
-          imageUrl = await uploadImageToSupabase(imageFile, response.user!.uid);
-        }
+        // String? imageUrl = '';
+        // if (imageFile != null) {
+        //   imageUrl = await uploadImageToSupabase(imageFile, response.user!.uid);
+        // }
 
         if (response != null) {
           UserModel user = UserModel(
@@ -91,8 +91,7 @@ class SignUpController extends GetxController {
             userName: usernameController.text.trim(),
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
-            imageUrl: imageUrl ??'',
-            formttedName: '$firstNameController $lastNameController',
+            imageUrl: '',
           );
           await authRepository.saveUser(user.toMap());
         }
@@ -102,7 +101,7 @@ class SignUpController extends GetxController {
         Get.offAll(() => ChatsScreen());
       } catch (e) {
         Get.snackbar(
-          duration: Duration(seconds: 20),
+          duration: Duration(seconds: 5),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.blue,
@@ -122,9 +121,9 @@ class SignUpController extends GetxController {
     final supabase = Supabase.instance.client;
     final filePath =
         'avatars/$userId-${DateTime.now().millisecondsSinceEpoch}.jpg';
-  
+
     final fileBytes = await file.readAsBytes();
-  
+
     final response = await supabase.storage
         .from('avatars')
         .uploadBinary(
@@ -132,9 +131,9 @@ class SignUpController extends GetxController {
           fileBytes,
           fileOptions: const FileOptions(contentType: 'image/jpeg'),
         );
-  
+
     if (response.isEmpty) return null;
-  
+
     final imageUrl = supabase.storage.from('avatars').getPublicUrl(filePath);
     return imageUrl;
   }
