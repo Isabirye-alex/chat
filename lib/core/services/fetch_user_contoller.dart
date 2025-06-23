@@ -1,5 +1,6 @@
 import 'package:chat_app/core/services/auth_services/auth_repository.dart';
 import 'package:chat_app/models/user_model/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,6 @@ class FetchUserController extends GetxController {
   final RxString error = ''.obs;
   final AuthRepository db = AuthRepository();
   List<UserModel> filteredUsers = <UserModel>[].obs;
-  // final debounce = RxString('').debounceTime(const Duration(milliseconds: 300));
   var searchText = ''.obs;
 
   @override
@@ -25,11 +25,10 @@ class FetchUserController extends GetxController {
     FirebaseAuth.instance.authStateChanges().listen((User? firebaseUser) async {
       if (firebaseUser != null) {
         try {
-          // Fetch current user data using AuthRepository
           final userData = await db.loadUser(firebaseUser.uid);
           if (userData != null) {
             currentUser.value = UserModel.fromMap(userData);
-            await fetchUsers(firebaseUser.uid); // Fetch users immediately
+            await _listenToUsers(firebaseUser.uid);
           } else {
             error.value = 'Current user data not found';
             isLoading.value = false;
@@ -61,6 +60,28 @@ class FetchUserController extends GetxController {
       );
     }
   }
+
+ _listenToUsers(String currentUserId) {
+    isLoading.value = true;
+    FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .listen(
+          (snapshot) {
+            final updatedUsers = snapshot.docs
+                .where((doc) => doc.id != currentUserId) 
+                .map((doc) => UserModel.fromMap(doc.data()))
+                .toList();
+            users.assignAll(updatedUsers);
+            isLoading.value = false;
+          },
+          onError: (e) {
+            error.value = 'Failed to load users: $e';
+            isLoading.value = false;
+          },
+        );
+  }
+
 
   Future fetchUsers(String uid) async {
     try {

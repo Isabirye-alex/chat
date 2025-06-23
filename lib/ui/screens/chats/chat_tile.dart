@@ -1,5 +1,4 @@
 import 'package:chat_app/core/services/fetch_user_contoller.dart';
-import 'package:chat_app/models/message_model/message_model.dart';
 import 'package:chat_app/ui/screens/chats/chats_view.dart';
 import 'package:chat_app/ui/widgets/search_box.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class ChatTile extends StatefulWidget {
 }
 
 class _ChatTileState extends State<ChatTile> {
-  late MessageModel message;
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FetchUserController());
@@ -70,6 +68,7 @@ class _ChatTileState extends State<ChatTile> {
                       const SizedBox(height: 5),
                   itemBuilder: (context, index) {
                     final user = usersToDisplay[index];
+                    
                     return Container(
                       padding: EdgeInsets.all(2.w),
                       decoration: BoxDecoration(
@@ -85,7 +84,7 @@ class _ChatTileState extends State<ChatTile> {
                             // tapped user is the receiver
                             sender: controller
                                 .currentUser
-                                .value!, // your app's current logged-in user
+                                .value!, // the app's current logged-in user
                           ),
                         ),
 
@@ -121,9 +120,16 @@ class _ChatTileState extends State<ChatTile> {
                             ),
                           ),
                           subtitle: Text(
-                            message.lastMessage ?? '',
-                            style: TextStyle(color: Colors.green),
+                            user.lastMessage != null
+                                ? user.lastMessage!['content']
+                                : '',
+                            style: TextStyle(
+                              color: Colors.green,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 1,
                           ),
+
                           trailing: Column(
                             children: [
                               Text('08:50 AM'),

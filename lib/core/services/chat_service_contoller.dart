@@ -12,8 +12,6 @@ class ChatServiceContoller extends GetxController {
   late String chatRoomId;
   late Map<String, dynamic> isPedning;
 
-  // final isPending = true;
-
   final RxList<MessageModel> messages = <MessageModel>[].obs;
 
   void init(UserModel receiverUser, UserModel senderUser) {
@@ -44,6 +42,8 @@ class ChatServiceContoller extends GetxController {
         });
   }
 
+
+
   MessageModel _getStatusFromDoc(QueryDocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
@@ -56,28 +56,29 @@ class ChatServiceContoller extends GetxController {
 
   Future<void> saveMessages() async {
     if (chatRoomId.isEmpty) throw Exception('chatRoomId is empty');
-    late String? text;
+
     final msg = messageController.text.trim();
-    if (msg.isNotEmpty) {
-      text = msg;
-      update();
-    } else {
+
+    if (msg.isEmpty) {
       Get.snackbar(
-        'Text field empty,',
-        'Enter some text',
+        'Text field empty',
+        'Please enter a message before sending.',
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.blue,
-        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
       );
+      return; // prevent sending
     }
+
     final now = DateTime.now();
     final message = MessageModel(
       id: now.microsecondsSinceEpoch.toString(),
       createdAt: now,
       receiver: receiver.uid,
       sender: sender.uid,
-      content: text,
-      status: MessageStatus.sending, // Step 1: Initial status
+      content: msg,
+      status: MessageStatus.sending,
     );
 
     messages.insert(0, message);
@@ -95,6 +96,7 @@ class ChatServiceContoller extends GetxController {
       if (index != -1) {
         messages[index] = messages[index].copyWith(status: MessageStatus.sent);
       }
+
       await getLastMessage(
         receiver.uid!,
         sender.uid!,
@@ -103,7 +105,7 @@ class ChatServiceContoller extends GetxController {
       );
     } catch (e) {
       final index = messages.indexWhere((m) => m.id == message.id);
-      if (index != -1) {
+      if (index != 0) {
         messages[index] = messages[index].copyWith(
           status: MessageStatus.failed,
         );
@@ -132,7 +134,7 @@ class ChatServiceContoller extends GetxController {
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(currentUid)
+          .doc(receiverUid)
           .update({
             'lastMessage': {
               'content': message,
@@ -142,7 +144,6 @@ class ChatServiceContoller extends GetxController {
           });
     } catch (e) {
       rethrow;
-      // debugPrint('Message sending failed: $e');
     }
   }
 }

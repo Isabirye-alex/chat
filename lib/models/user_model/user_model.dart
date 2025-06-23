@@ -16,6 +16,7 @@ class UserModel {
   final String? userName;
   final String? uid;
   final String? imageUrl;
+  final Map<String, dynamic>? lastMessage;
 
   UserModel({
     this.email,
@@ -25,6 +26,7 @@ class UserModel {
     this.userName,
     this.uid,
     this.imageUrl,
+    this.lastMessage
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +38,7 @@ class UserModel {
       'userName': userName,
       'uid': uid,
       'imageUrl': imageUrl,
+      'lastMessage': lastMessage,
     };
   }
 
@@ -48,6 +51,7 @@ class UserModel {
       userName: map['userName'] != null ? map['userName'] as String : null,
       uid: map['uid'] != null ? map['uid'] as String : null,
       imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
+      lastMessage: map['lastMessage'] != null ? Map<String, dynamic>.from((map['lastMessage'] as Map<String, dynamic>)) : null,
     );
   }
 
@@ -57,7 +61,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(firstName: $firstName, lastName: $lastName, email: $email, password: $password, userName: $userName, uid: $uid, imageUrl: $imageUrl)';
+    return 'UserModel(firstName: $firstName, lastName: $lastName, email: $email, password: $password, userName: $userName, uid: $uid, imageUrl: $imageUrl, lastMessage: $lastMessage)';
   }
 
   UserModel copyWith({
@@ -68,6 +72,7 @@ class UserModel {
     String? userName,
     String? uid,
     String? imageUrl,
+    Map<String, dynamic>? lastMessage,
   }) {
     return UserModel(
       firstName: firstName ?? this.firstName,
@@ -77,6 +82,7 @@ class UserModel {
       userName: userName ?? this.userName,
       uid: uid ?? this.uid,
       imageUrl: imageUrl ?? this.imageUrl,
+      lastMessage: lastMessage ?? this.lastMessage,
     );
   }
 }
